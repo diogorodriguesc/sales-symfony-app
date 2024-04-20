@@ -1,0 +1,2 @@
+imports:
+    - { resource: '../../Command/CreateCustomer/Resources/config/services.yaml' }

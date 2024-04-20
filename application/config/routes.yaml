@@ -1,0 +1,10 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+api_post_create_customer:
+    path: /api/customers
+    controller: App\Controller\CreateCustomerController::createCustomer
+    methods: POST
