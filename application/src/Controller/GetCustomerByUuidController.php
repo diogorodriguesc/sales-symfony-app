@@ -14,22 +14,25 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 final class GetCustomerByUuidController extends AbstractController
 {
-    public function __construct(private readonly CommandBus $commandBus)
+    public function __construct(
+        private readonly CommandBus $commandBus,
+        private readonly SerializerInterface $serializer
+    )
     {}
 
-    public function getCustomerByUuid(SerializerInterface $serializer, string $uuid): Response
+    public function getCustomerByUuid(string $uuid): Response
     {
         $customer = $this->commandBus->handle(new Query(UuidV4::fromString($uuid)));
 
         if (!$customer) {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException('Customer not found');
         }
 
         $context = (new ObjectNormalizerContextBuilder())
             ->withGroups('show_customer')
             ->toArray();
 
-        $json = $serializer->serialize($customer, 'json', $context);
+        $json = $this->serializer->serialize($customer, 'json', $context);
 
         return new Response($json, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }

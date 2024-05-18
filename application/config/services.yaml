@@ -15,3 +15,6 @@ services:
             - '../src/Entity/'
             - '../src/UseCase/'
             - '../src/Kernel.php'
+
+    App\EventListener\ExceptionListener:
+        tags: [kernel.event_listener]

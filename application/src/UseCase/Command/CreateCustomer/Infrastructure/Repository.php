@@ -15,7 +15,7 @@ final readonly class Repository implements RepositoryInterface
     {
     }
 
-    public function createCustomer(Command $command): bool
+    public function createCustomer(Command $command): Customer
     {
         $customer = new Customer();
 
@@ -28,6 +28,6 @@ final readonly class Repository implements RepositoryInterface
         $this->entityManager->persist($customer);
         $this->entityManager->flush();
 
-        return true;
+        return $customer;
     }
 }
