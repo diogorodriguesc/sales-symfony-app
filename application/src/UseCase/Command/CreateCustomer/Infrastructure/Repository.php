@@ -7,6 +7,7 @@ use App\Entity\Customer;
 use App\UseCase\Command\CreateCustomer\Command;
 use App\UseCase\Command\CreateCustomer\RepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Ramsey\Uuid\Uuid;
 
 final readonly class Repository implements RepositoryInterface
 {
@@ -21,7 +22,8 @@ final readonly class Repository implements RepositoryInterface
         $customer
             ->setName($command->name)
             ->setTaxIdentificationNumber($command->taxIdentificationNumber)
-            ->setCountryCode($command->countryCode);
+            ->setCountryCode($command->countryCode)
+            ->setUuid(Uuid::uuid4()->toString());
 
         $this->entityManager->persist($customer);
         $this->entityManager->flush();

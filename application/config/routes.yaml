@@ -8,3 +8,10 @@ api_post_create_customer:
     path: /api/customers
     controller: App\Controller\CreateCustomerController::createCustomer
     methods: POST
+
+api_get_customer_by_uuid:
+    path: /api/customers/{uuid}
+    controller: App\Controller\GetCustomerByUuidController::getCustomerByUuid
+    methods: GET
+    requirements:
+        uuid: '[0-9a-f]{8}-[0-9a-f]{4}-[1-6][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}'

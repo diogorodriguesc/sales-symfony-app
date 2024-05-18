@@ -5,6 +5,7 @@ namespace App\Entity;
 
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
@@ -21,19 +22,33 @@ class Customer
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
+    #[Groups(['show_customer'])]
     private string $name;
+
+    #[ORM\Column(length: 36)]
+    #[Assert\NotBlank]
+    #[Assert\Uuid]
+    #[Groups(['show_customer'])]
+    private string $uuid;
 
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank]
+    #[Groups(['show_customer'])]
     private string $taxIdentificationNumber;
 
     #[ORM\Column(length: 2)]
     #[Assert\NotBlank]
+    #[Groups(['show_customer'])]
     private string $countryCode;
 
     public function id(): ?int
     {
         return $this->id;
+    }
+
+    public function uuid(): string
+    {
+        return $this->uuid;
     }
 
     public function name(): string
@@ -49,6 +64,13 @@ class Customer
     public function countryCode(): string
     {
         return $this->countryCode;
+    }
+
+    public function setUuid(string $uuid): self
+    {
+        $this->uuid = $uuid;
+
+        return $this;
     }
 
     public function setName(string $name): self

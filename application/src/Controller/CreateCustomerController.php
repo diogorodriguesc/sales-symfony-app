@@ -9,6 +9,7 @@ use League\Tactician\CommandBus;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class CreateCustomerController extends AbstractController
@@ -16,7 +17,7 @@ final class CreateCustomerController extends AbstractController
     public function __construct(private readonly CommandBus $commandBus)
     {}
 
-    public function createCustomer(Request $request, ValidatorInterface $validator): JsonResponse
+    public function createCustomer(Request $request, ValidatorInterface $validator): Response
     {
         try {
             $this->commandBus->handle(Command::buildFromRequest($request, $validator));
@@ -24,6 +25,6 @@ final class CreateCustomerController extends AbstractController
             return new JsonResponse(['message' => $e->getMessage(), 'fields' => $e->getErrorFields()], 400);
         }
 
-        return new JsonResponse();
+        return new Response(null, Response::HTTP_CREATED, ['Content-Type' => 'application/json']);
     }
 }

@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\UseCase\Query\GetCustomerByUuid\:
+        resource: '../../'
+
+    App\UseCase\Query\GetCustomerByUuid\QueryHandler:
+        tags:
+            - { name: tactician.handler, command: App\UseCase\Query\GetCustomerByUuid\Query }

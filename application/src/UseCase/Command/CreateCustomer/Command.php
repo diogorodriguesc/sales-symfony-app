@@ -3,15 +3,27 @@ declare(strict_types=1);
 
 namespace App\UseCase\Command\CreateCustomer;
 
-use App\Entity\Customer;
 use App\UseCase\Command\CreateCustomer\Exception\InvalidArgumentsException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final readonly class Command
 {
-    public function __construct(public string $name, public string $taxIdentificationNumber, public string $countryCode)
+    #[Assert\NotBlank]
+    public string $name;
+
+    #[Assert\NotBlank]
+    public string $taxIdentificationNumber;
+
+    #[Assert\NotBlank]
+    public string $countryCode;
+
+    public function __construct(string $name, string $taxIdentificationNumber, string $countryCode)
     {
+        $this->name = $name;
+        $this->taxIdentificationNumber = $taxIdentificationNumber;
+        $this->countryCode = $countryCode;
     }
 
     /**
@@ -21,12 +33,13 @@ final readonly class Command
     {
         $params = $request->getPayload()->all();
 
-        $customer = new Customer();
-        $customer->setName($params['name'] ?? '');
-        $customer->setTaxIdentificationNumber($params['taxIdentificationNumber'] ?? '');
-        $customer->setCountryCode(strtoupper($params['countryCode'] ?? ''));
+        $self = new self(
+            $params['name'] ?? '',
+            $params['taxIdentificationNumber'] ?? '',
+            $params['countryCode'] ?? ''
+        );
 
-        if (($errors = $validator->validate($customer)) && count($errors) > 0) {
+        if (($errors = $validator->validate($self)) && count($errors) > 0) {
             $errorFields = [];
             foreach ($errors as $error) {
                 $errorFields[] = [
@@ -38,6 +51,6 @@ final readonly class Command
             throw new InvalidArgumentsException($errorFields);
         }
 
-        return new self($customer->name(), $customer->taxIdentificationNumber(), $customer->countryCode());
+        return $self;
     }
 }
