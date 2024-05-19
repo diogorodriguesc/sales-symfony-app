@@ -19,7 +19,7 @@ final class CreateCustomerController extends AbstractController
     public function __construct(private readonly CommandBus $commandBus, private readonly SerializerInterface $serializer)
     {}
 
-    public function createCustomer(Request $request, ValidatorInterface $validator): Response
+    public function __invoke__(Request $request, ValidatorInterface $validator): Response
     {
         try {
             $customer = $this->commandBus->handle(Command::buildFromRequest($request, $validator));
