@@ -25,7 +25,7 @@ final class CreateCustomerController extends AbstractController
             $customer = $this->commandBus->handle(Command::buildFromRequest($request, $validator));
 
             $context = (new ObjectNormalizerContextBuilder())
-                ->withGroups('show_customer')
+                ->withGroups(['show_customer', 'show_country'])
                 ->toArray();
 
             $json = $this->serializer->serialize($customer, 'json', $context);

@@ -3,15 +3,15 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: CustomerRepository::class)]
+#[ORM\Entity]
 #[ORM\UniqueConstraint(
     name: 'tax_identification_number_country_code_idx',
-    columns: ['tax_identification_number', 'country_code']
+    columns: ['tax_identification_number', 'country_id']
 )]
 class Customer
 {
@@ -36,10 +36,9 @@ class Customer
     #[Groups(['show_customer'])]
     private string $taxIdentificationNumber;
 
-    #[ORM\Column(length: 2)]
-    #[Assert\NotBlank]
+    #[ManyToOne(targetEntity: Country::class, inversedBy: 'customer')]
     #[Groups(['show_customer'])]
-    private string $countryCode;
+    private Country $country;
 
     public function id(): ?int
     {
@@ -61,9 +60,9 @@ class Customer
         return $this->taxIdentificationNumber;
     }
 
-    public function countryCode(): string
+    public function country(): Country
     {
-        return $this->countryCode;
+        return $this->country;
     }
 
     public function setUuid(string $uuid): self
@@ -87,9 +86,9 @@ class Customer
         return $this;
     }
 
-    public function setCountryCode(string $countryCode): self
+    public function setCountry(Country $country): self
     {
-        $this->countryCode = $countryCode;
+        $this->country = $country;
 
         return $this;
     }

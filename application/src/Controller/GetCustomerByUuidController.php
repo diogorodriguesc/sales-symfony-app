@@ -27,7 +27,7 @@ final class GetCustomerByUuidController extends AbstractController
             throw new NotFoundHttpException('Customer not found');
         }
 
-        $json = $this->serializer->serialize($customer, 'json', ['groups' => 'show_customer']);
+        $json = $this->serializer->serialize($customer, 'json', ['groups' => ['show_customer', 'show_country']]);
 
         return new Response($json, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
