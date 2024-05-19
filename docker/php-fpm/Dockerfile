@@ -1,9 +1,11 @@
 FROM php:8.3-fpm
 
+COPY php.ini /usr/local/etc/php/conf.d/
+
 RUN apt-get update
 
 RUN apt-get -y install git
-RUN docker-php-ext-install pdo pdo_mysql
+RUN docker-php-ext-install pdo pdo_mysql opcache
 
 RUN curl --insecure https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
 
