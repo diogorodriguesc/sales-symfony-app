@@ -19,7 +19,7 @@ final readonly class Command
     #[Assert\NotBlank]
     public string $countryCode;
 
-    public function __construct(string $name, string $taxIdentificationNumber, string $countryCode)
+    private function __construct(string $name, string $taxIdentificationNumber, string $countryCode)
     {
         $this->name = $name;
         $this->taxIdentificationNumber = $taxIdentificationNumber;
